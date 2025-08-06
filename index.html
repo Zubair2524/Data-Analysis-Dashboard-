@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1><i class="fas fa-chart-line"></i> Data Analysis Dashboard</h1>
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="totalRecords">0</span>
+                        <span class="stat-label">Total Records</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="filteredRecords">0</span>
+                        <span class="stat-label">Filtered Records</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <h2><i class="fas fa-filter"></i> Filters</h2>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="brandFilter"><i class="fas fa-tag"></i> Brand</label>
+                    <div class="custom-select">
+                        <input type="text" id="brandFilter" placeholder="Search brands..." autocomplete="off">
+                        <div class="dropdown-content" id="brandDropdown"></div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter"><i class="fas fa-layer-group"></i> Category</label>
+                    <div class="custom-select">
+                        <input type="text" id="categoryFilter" placeholder="Search categories..." autocomplete="off">
+                        <div class="dropdown-content" id="categoryDropdown"></div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="moleculeFilter"><i class="fas fa-atom"></i> Molecule</label>
+                    <div class="custom-select">
+                        <input type="text" id="moleculeFilter" placeholder="Search molecules..." autocomplete="off">
+                        <div class="dropdown-content" id="moleculeDropdown"></div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="skuFilter"><i class="fas fa-barcode"></i> SKU</label>
+                    <div class="custom-select">
+                        <input type="text" id="skuFilter" placeholder="Search SKUs..." autocomplete="off">
+                        <div class="dropdown-content" id="skuDropdown"></div>
+                    </div>
+                </div>
+                <button id="clearFilters" class="clear-btn">
+                    <i class="fas fa-times"></i> Clear All Filters
+                </button>
+            </div>
+        </section>
+
+        <!-- KPI Cards Section -->
+        <section class="kpi-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Key Performance Indicators</h2>
+            <div class="kpi-grid">
+                <div class="kpi-card total-value">
+                    <div class="kpi-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Value</h3>
+                        <span class="kpi-value" id="totalValue">$0</span>
+                    </div>
+                </div>
+                <div class="kpi-card total-units">
+                    <div class="kpi-icon">
+                        <i class="fas fa-cubes"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Units</h3>
+                        <span class="kpi-value" id="totalUnits">0</span>
+                    </div>
+                </div>
+                <div class="kpi-card value-growth">
+                    <div class="kpi-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Value Growth</h3>
+                        <span class="kpi-value" id="valueGrowth">0%</span>
+                    </div>
+                </div>
+                <div class="kpi-card unit-growth">
+                    <div class="kpi-icon">
+                        <i class="fas fa-trending-up"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Unit Growth</h3>
+                        <span class="kpi-value" id="unitGrowth">0%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs Navigation -->
+        <section class="tabs-section">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-chart-bar"></i> Overview
+                </button>
+                <button class="tab-btn" data-tab="performance">
+                    <i class="fas fa-trophy"></i> Performance
+                </button>
+                <button class="tab-btn" data-tab="analysis">
+                    <i class="fas fa-microscope"></i> Analysis
+                </button>
+            </div>
+        </section>
+
+        <!-- Charts Grid -->
+        <main class="charts-grid">
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overview">
+                <div class="chart-row">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-bar"></i> Top 5 Brands by Value</h3>
+                        <canvas id="topBrandsValueChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-cubes"></i> Top 5 Brands by Units</h3>
+                        <canvas id="topBrandsUnitsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-layer-group"></i> Categories Distribution</h3>
+                        <canvas id="categoriesChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-atom"></i> Molecules Performance</h3>
+                        <canvas id="moleculesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Tab -->
+            <div class="tab-content" id="performance">
+                <div class="chart-row">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-line"></i> Value Growth Analysis</h3>
+                        <canvas id="valueGrowthChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-trending-up"></i> Unit Growth Analysis</h3>
+                        <canvas id="unitGrowthChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-row full-width">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-scatter-chart"></i> Value vs Units Correlation</h3>
+                        <canvas id="scatterChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Tab -->
+            <div class="tab-content" id="analysis">
+                <div class="chart-row">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-pie"></i> Brand Market Share</h3>
+                        <canvas id="brandMarketShareChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-area"></i> Category Performance</h3>
+                        <canvas id="categoryPerformanceChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="chart-container">
+                        <h3><i class="fas fa-dna"></i> Molecule Distribution</h3>
+                        <canvas id="moleculeDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-chart-radar"></i> Multi-dimensional Analysis</h3>
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Data Table Section -->
+        <section class="data-table-section">
+            <h2><i class="fas fa-table"></i> Data Table</h2>
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Molecule</th>
+                            <th>Value 25</th>
+                            <th>Unit 25</th>
+                            <th>Value Growth %</th>
+                            <th>Unit Growth %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
